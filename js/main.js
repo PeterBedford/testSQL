@@ -654,8 +654,6 @@ function execute(commands, check) {
 		// if sandbox mode don't even check the cache for the answer just let them play
 		if (isSandboxMode() === true || check === false) {
 			showFeedback('Query executed successfully', 'alert-success');
-		} else if (isCompleted(currQuestion)) {
-			showSuccess(currQuestion);
 		} else {
 			var feedback = checkAnswer(results, commands);
 			if (feedback === true) {
