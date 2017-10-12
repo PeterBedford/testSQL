@@ -762,10 +762,11 @@ group by manager.ename, manager.deptno;",
 insert into testsql_question (section, num, question, answer, include)
 values (
 	"G", " 4",
-	"Show only those people who are
-directly responsible for the management of more than
-two employees.",
-	"select manager.ename, count(staff.empno)
+	"Show the result of G3 (names of all the people in a management position,
+their department number and the number of staff for whom they have direct
+responsibility), but only for those people who are directly responsible for
+the management of more than two employees.",
+	"select manager.ename, manager.deptno, count(staff.empno)
 from emp staff
 inner join emp manager
 on staff.mgr = manager.empno
@@ -778,8 +779,8 @@ insert into testsql_question (section, num, question, answer, include)
 values (
 	"G", " 5",
 	"Display the employee name, location and department number of
-those managers whose salary is greater than £1500.",
-	"select manager.ename, loc, dept.deptno
+those managers whose salary is greater than £1500. Ensure the results do not include duplicates.",
+	"select distinct manager.ename, loc, dept.deptno
 from emp staff
 inner join emp manager
 on staff.mgr = manager.empno
