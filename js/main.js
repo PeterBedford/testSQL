@@ -430,12 +430,15 @@ function updateCurrQuestionDisplay() {
 	editableCodeMirror.setValue('');
 
 	var qDetails = getQuestion(currQuestion);
-	var check = (QuestionProgress.indexOf(currQuestion) >= 0);
-	debugMsg(currQuestion, "is answered", check);
+	
+	if (qDetails) {
+		var check = (QuestionProgress.indexOf(currQuestion) >= 0);
+		debugMsg(currQuestion, "is answered", check);
 
-	$('#status-SQL').toggle(check);
-	var type = qDetails.type; if (!isDef(type)) type='';
-	$('#currQuestionTitle-SQL').html('Question ' + currQuestion + ' ' + type);
+		$('#status-SQL').toggle(check);
+		var type = qDetails.type; if (!isDef(type)) type='';
+		$('#currQuestionTitle-SQL').html('Question ' + currQuestion + ' ' + type);
+	}
 	$('#currQuestion-SQL').html(isSandboxMode() ? 'Questions are <strong>disabled</strong> in sandbox mode.' : qDetails.Question);
 }
 
@@ -461,7 +464,11 @@ var selectedSection;
 // progress on questions for the current section
 var QuestionProgress;
 
-var useDB = 'DefaultDatabase.db'; // 'employeeDatabase.db';
+// database loaded by default
+var useDB = 'employeeplusexam.db';
+// was: 'employeeDatabase.db';
+// a better system would make it easy to switch between databases
+// or run them all, e.g. employee, northwind, exam database etc
 
 // grab the default text and save it
 var defaultResultsText = $('#results-SQL').html()
@@ -765,9 +772,11 @@ function getRandomInt(min, max) {
  * @return {array} - array of the table name(s)
  */
 function getTables(n, strict) {
-	strict = (typeof strict !== 'undefined') ? strict : true
+	strict = (typeof strict !== 'undefined') ? strict : true;
+	
+	var q = "SELECT distinct tbl_name FROM sqlite_master WHERE tbl_name NOT LIKE 'sqlite%' AND tbl_name NOT LIKE 'testsql%' AND tbl_name NOT IN (select table_name from testsql_excluded where column_name = '*');"
 
-	var result = db.exec("SELECT distinct tbl_name FROM sqlite_master WHERE tbl_name NOT LIKE 'sqlite%' AND tbl_name NOT LIKE 'testsql%';");
+	var result = db.exec(q);
 	var rows = result[0].values;
 
 	debugMsg("Tables to choose from ",rows);
@@ -984,7 +993,7 @@ function getRows(tbl_name, col_name, n, strict) {
  */
 function Question1() {
 
-	var tbl_name = getTables(1)
+	var tbl_name = getTables(1);
 
 	var Q = 'Select everything from the table <em>' + tbl_name + '</em>'
 	var A = 'SELECT * FROM `' + tbl_name + '`'

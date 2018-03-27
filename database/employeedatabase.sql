@@ -939,7 +939,7 @@ values (
 	"select ename
 from emp
 where job = 'SALESMAN'
-and (sal + nvl(comm, 0)) = ( select max(sal + nvl(comm, 0)) max_pay
+and (sal + ifnull(comm, 0)) = ( select max(sal + ifnull(comm, 0)) max_pay
                              from emp
                              where job = 'SALESMAN'
                            );
@@ -956,12 +956,13 @@ values (
 Don’t work out how many people there are in department 10, department
 codes may change next week!",
 	"-- identify what is the highest income in New York
- select max(sal + ifnull(comm, 0))
+/*
+ select ename, max(sal + ifnull(comm, 0))
  from emp
  inner join dept
  on emp.deptno = dept.deptno
  where loc = 'New York';
-
+*/
 -- now embed as a subquery, remember to repeat the 'NEW YORK'
 
 select ename
@@ -982,9 +983,8 @@ and (sal + ifnull(comm, 0)) = (
 insert into testsql_question (section, num, question, answer, include)
 values (
 	"H", " 7",
-	"List the names of the people who work with Jones (you may use the fact
-that his Employee number is 7566 as there may be more than one 'JONES' on
-the list) in his department.",
+	"List the names of the people who work in the same department as Jones (you may use his Employee number (7566),
+as there may be more than one 'JONES' on the list) in his department.",
 	"select ename
 from emp
 where empno != 7566
@@ -1033,14 +1033,22 @@ values (
 in your solution.",
 	"select avg(sal)
 from emp
+where sal
+between (select losal from salgrade where grade=2)
+    and (select hisal from salgrade where grade=2);
+
+-- Alternatively, this second solution shows how to avoid the subquery
+
+select avg(sal)
+from emp
 where empno in (
    select empno
    from emp
-	inner join salgrade
+   inner join salgrade
    on sal between losal and hisal
    where grade = 2
-)",
-   "IN"
+);",
+   null
 );
 
 
