@@ -1,5 +1,5 @@
 # Currently revising the application
-The original creator is Josh License, see his work [here](https://github.com/JoshuaLicense/testSQL/tree/Beta)
+The original creator is Josh License, see his work [here](https://github.com/JoshuaLicense/testSQL/tree)
 
 # What is testSQL?
 testSQL is an application that is an easy to deploy interactive tuition tool to help learning SQL.
@@ -17,4 +17,4 @@ testSQL is an application that is an easy to deploy interactive tuition tool to 
 * The application will become more modular where removing a file will only remove specific functionality
 
 ## Contributions
-* I am in the process of recoding the entire application into ES6, see ['Beta'](https://github.com/JoshuaLicense/testSQL/tree/Beta) branch, so please pull request that branch instead.
+* Are welcome, though consider Josh's work which has been recoded in react.js.
